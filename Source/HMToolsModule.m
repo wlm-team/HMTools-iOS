@@ -7,9 +7,7 @@
 //
 
 #import "HMToolsModule.h"
-#import "HMUnlockView.h"
 #import <BMBaseLibrary/BMWebViewRouterModel.h>
-#import "HMUnlockView.h"
 #import "HMWebViewController.h"
 #import "BMMediatorManager.h"
 #import "RSA.h"
@@ -18,7 +16,7 @@
 
 @implementation HMToolsModule
 @synthesize weexInstance;
-WX_PlUGIN_EXPORT_MODULE(hmTool, HMToolsModule)
+WX_PlUGIN_EXPORT_MODULE(hmTools, HMToolsModule)
 WX_EXPORT_METHOD(@selector(sendMail:))
 WX_EXPORT_METHOD(@selector(toWebViewWithNoCache:))
 WX_EXPORT_METHOD(@selector(encryptDataByPublicKey:data:callback:))
