@@ -181,7 +181,8 @@ typedef void(^BMNativeHandle)(void);
     self.navigationItem.leftBarButtonItems = @[backItem, closeItem];
     /** 功能面板 */
     UIBarButtonItem * shareItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"actionIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(share)];
-    self.navigationItem.rightBarButtonItem = shareItem;
+    /** 显示右侧分享按钮*/
+//    self.navigationItem.rightBarButtonItem = shareItem;
     
     
     self.timer = [NSTimer scheduledTimerWithTimeInterval:0.15 target:self selector:@selector(progressAnimation:) userInfo:nil repeats:YES];
@@ -262,8 +263,60 @@ typedef void(^BMNativeHandle)(void);
     [self.webView loadRequest:request];
 }
 
+#pragma mark - WKWebViewDelegate
 
-#pragma mark - UIWebViewDelegate
+- (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
+    
+    if (_showProgress) {
+        
+        [self.timer resumeTimer];
+        
+    }
+    [SVProgressHUD showWithStatus:@"waiting..."];
+    _showProgress = YES;
+    
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    
+    /** 检查一下字体大小 */
+    //    [self.webView checkCurrentFontSize];
+    //    NSLog(self.webView.request.URL.absoluteString);
+    NSString *url =self.webView.URL.absoluteString;
+    [SVProgressHUD dismiss];
+    self.currentStr = url;
+    //    NSString * docTitle = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    //    if (docTitle && docTitle.length) {
+    //        self.navigationItem.title = docTitle;
+    //    }
+    
+    if (_timer != nil) {
+        [_timer pauseTimer];
+    }
+    
+    if (_progressLayer) {
+        _progressLayer.strokeEnd = 1.0f;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_progressLayer removeFromSuperlayer];
+            _progressLayer = nil;
+        });
+    }
+    
+    if([url isEqualToString:@"about:blank"]){
+        [self closeItemClicked];
+        return;
+    }
+    
+    NSRange range = [url rangeOfString:@"?module=&scope=&detailid="];
+    
+    if(range.location!= NSNotFound){
+        [self closeItemClicked];
+        return;
+    }
+    
+}
+
+#pragma mark - UIWebViewDelegate (废弃)
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
