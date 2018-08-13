@@ -11,6 +11,7 @@
 #import "HMWebViewController.h"
 #import "BMMediatorManager.h"
 #import "RSA.h"
+#import "RHScanViewController.h"
 
 #import <WeexPluginLoader/WeexPluginLoader.h>
 
@@ -21,6 +22,19 @@ WX_EXPORT_METHOD(@selector(sendMail:))
 WX_EXPORT_METHOD(@selector(toWebViewWithNoCache:))
 WX_EXPORT_METHOD(@selector(encryptDataByPublicKey:data:callback:))
 
+WX_EXPORT_METHOD(@selector(scan:))
+
+
+
+
+- (void)scan:(WXModuleCallback)callback
+{
+    RHScanViewController *vc = [RHScanViewController new];
+    vc.isOpenInterestRect = YES;
+    vc.isVideoZoom = YES;
+    vc.callback = callback;
+    [weexInstance.viewController.navigationController pushViewController:vc animated:YES];
+}
 
 -(void)sendMail:(NSString *)addressee {
     NSLog(@"%@", [NSString stringWithFormat:@"mailto://%@",addressee]);
