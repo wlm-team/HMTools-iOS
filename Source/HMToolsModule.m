@@ -10,7 +10,7 @@
 #import <BMBaseLibrary/BMWebViewRouterModel.h>
 #import "HMWebViewController.h"
 #import "BMMediatorManager.h"
-#import "RSA.h"
+#import "HMRSA.h"
 #import "RHScanViewController.h"
 
 #import <WeexPluginLoader/WeexPluginLoader.h>
@@ -71,7 +71,7 @@ WX_EXPORT_METHOD(@selector(scan:))
 }
 -(void)encryptDataByPublicKey:(NSString *) key data:(NSString *)data callback:(WXModuleCallback)success{
     NSString *pem = [NSString stringWithFormat:@"-----BEGIN PUBLIC KEY-----%@-----END PUBLIC KEY-----",key];
-    NSString *encrypted = [RSA encryptString:data publicKey:pem];
+    NSString *encrypted = [HMRSA encryptString:data publicKey:pem];
     success(encrypted);
 }
 
