@@ -45,10 +45,10 @@ hmTools.encryptDataByPublicKey(RSAKey, password, function (response) {
 
 **对密码进行RSA加密**
 
-    参数    |     说明     |    类型 
------------|--------------|-----------
-   RSAKey  |     公钥     |   string
-  password |     密码     |   string
+|    参数    |     说明     |    类型   |
+|:---------:|:------------:|:--------:|
+|   RSAKey  |     公钥     |   string  |
+|  password |     密码     |   string  |
   
 ---------------------------------------------------------
   
@@ -58,9 +58,9 @@ hmTools.sendMail(address)
 
 **发送邮件**
 
-    参数    |     说明     |    类型 
------------|--------------|-----------
-  address  |    url地址    |   string
+|    参数    |     说明     |    类型   |
+|:---------:|:------------:|:--------:|
+|  address  |    url地址    |   string |
 
 ---------------------------------------------------------
 
@@ -80,17 +80,17 @@ hmTools.toWebViewWithNoCache(config)
 
 ### 参数详情
 
-           参数            |     说明       |    类型 
---------------------------|----------------|-----------
-      url                 | 页面url地址     |    string
-      title               | 页面title标题   |    string
-      navShow             | 是否隐藏导航栏   |    bool
-      shareModel          | 分享详细信息     |    json
-      shareModel.image    | 分享图片路径     |    string
-      shareModel.title    | 分享标题        |    string
-      shareModel.content  | 分享内容        |    string
-      shareModel.url      | 分享地址        |    string
-      shareModel.platform | 分享平台        |    array
+|           参数            |     说明       |    类型    |
+|:------------------------:|:--------------:|:---------:|
+|      url                 | 页面url地址     |    string  |
+|      title               | 页面title标题   |    string  |
+|      navShow             | 是否隐藏导航栏   |    bool    |
+|      shareModel          | 分享详细信息     |    json    |
+|      shareModel.image    | 分享图片路径     |    string  |
+|      shareModel.title    | 分享标题        |    string  |
+|      shareModel.content  | 分享内容        |    string  |
+|      shareModel.url      | 分享地址        |    string  |
+|      shareModel.platform | 分享平台        |    array   |
  
 ---------------------------------------------------------
 
