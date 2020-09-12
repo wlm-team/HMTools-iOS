@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name         = "HMTools"
-s.version      = "1.0.5"
+s.version      = "1.0.6"
 s.summary      = "HMTool Source ."
 s.homepage     = 'https://github.com/shawn-tangsc/weex-plugin-ios-gesture.git'
 s.license      = "MIT"
