@@ -14,7 +14,7 @@
 #import "BMMediatorManager.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
 #import <JavaScriptCore/JavaScriptCore.h>
-#import "UIWebView+BMExtend.h"
+
 #import "BMUserInfoModel.h"
 #import "SVProgressHUD.h"
 #import "UIView+Util.h"
@@ -47,7 +47,6 @@ typedef void(^BMNativeHandle)(void);
 @interface HMWebViewController () <WKNavigationDelegate, WKUIDelegate, JSExport>
 {
     BOOL _showProgress;
-    JSContext *_jsContext;
 }
 @property (nonatomic, strong) WKWebView *webView;
 
@@ -316,105 +315,7 @@ typedef void(^BMNativeHandle)(void);
     
 }
 
-#pragma mark - UIWebViewDelegate (废弃)
 
-- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-    
-    if (_showProgress) {
-        
-        [self.timer resumeTimer];
-        
-    }
-    [SVProgressHUD showWithStatus:@"waiting..."];
-    _showProgress = YES;
-}
-
-//- (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView{
-//    
-//}
-
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    
-    /* 如果是goBack的操作 从新加载url避免有些页面加载不完全的问题 */
-    if (navigationType == UIWebViewNavigationTypeBackForward) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSURL *url = [NSURL URLWithString:request.URL.absoluteString];
-            NSURLRequest *request = [NSURLRequest requestWithURL:url];
-            [self.webView loadRequest:request];
-        });
-        return YES;
-    }
-    
-    WXLogInfo(@"%@",request.URL.absoluteString);
-    
-    /* 获取js的运行环境 */
-    _jsContext = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
-    [self injectionJsMethod];
-    
-    return YES;
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    /** 检查一下字体大小 */
-//    [self.webView checkCurrentFontSize];
-//    NSLog(self.webView.request.URL.absoluteString);
-    NSString *url =self.webView.URL.absoluteString;
-    [SVProgressHUD dismiss];
-    self.currentStr = url;
-//    NSString * docTitle = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-//    if (docTitle && docTitle.length) {
-//        self.navigationItem.title = docTitle;
-//    }
-        
-    if (_timer != nil) {
-        [_timer pauseTimer];
-    }
-    
-    if (_progressLayer) {
-        _progressLayer.strokeEnd = 1.0f;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [_progressLayer removeFromSuperlayer];
-            _progressLayer = nil;
-        });
-    }
-    
-    if([url isEqualToString:@"about:blank"]){
-        [self closeItemClicked];
-        return;
-    }
-    
-    NSRange range = [url rangeOfString:@"?module=&scope=&detailid="];
-    
-    if(range.location!= NSNotFound){
-        [self closeItemClicked];
-        return;
-    }
-    
-}
-
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
-{
-    WXLogInfo(@"\n******************** - WebView didFailLoad - ********************\n %@",error);
-    
-    if (_timer != nil) {
-        [_timer pauseTimer];
-    }
-    
-    if (_progressLayer) {
-        [_progressLayer removeFromSuperlayer];
-        _progressLayer = nil;
-    }
-    
-    WXLogInfo(@"\n******************** - WebView didFailLoad - ********************\n %@",webView.request.URL.absoluteString);
-    
-    //    // 确保加载的是第一个url时显示
-    //    if (!webView.request.URL || !webView.request.URL.absoluteString || webView.request.URL.absoluteString.length < 1) {
-    //        [self showRequestAgainView];
-    //    }
-}
 
 - (void)progressAnimation:(NSTimer *)timer
 {
@@ -470,7 +371,7 @@ typedef void(^BMNativeHandle)(void);
         @strongify(self);
         [self closeItemClicked];
     };
-    _jsContext[@"bmnative"] = bmnative;
+//    _jsContext[@"bmnative"] = bmnative;
 }
 
 @end
